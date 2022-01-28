@@ -1,1 +1,1 @@
-# SPIRV-lit-translator
+# SPIRV-lit-converter
