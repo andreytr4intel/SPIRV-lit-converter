@@ -12,9 +12,9 @@ if [[ -z "$1" ]]; then
 fi
 
 SDIR="$SPIRV_HOME/llvm-project" # Source Dir
-DDIR="$SPIRV_HOME/spirv-backend" # Dest Dir
+DDIR="$SPIRV_HOME/LLVM-SPIRV-Backend" # Dest Dir
 STEST="$SDIR/llvm/projects/SPIRV-LLVM-Translator/test"
-DTEST="$DDIR/LLVM-SPIRV-Backend/llvm/test/CodeGen/SPIRV"
+DTEST="$DDIR/llvm/test/CodeGen/SPIRV"
 SBIN="$SDIR/build/bin"
 DBIN="$DDIR/build/bin"
 
