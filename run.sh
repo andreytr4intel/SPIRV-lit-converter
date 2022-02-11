@@ -38,7 +38,7 @@ WD=`dirname "$0"`
 cd "$WD"
 WD=`pwd`
 
-"$WD/strip.py" "$STEST/$SLL" > /dev/null || exit $?
+"$WD/strip.py" "$STEST/$SLL" > /dev/null || { EX=$? && echo "Unacceptable test $SLL" && exit $EX; }
 
 S1=`dirname "$SLL"`
 #echo "$S1"         # relative path without test name
@@ -74,7 +74,7 @@ rm "$BC" || exit $?
 #rm "${BC/%.bc/.spt}" || exit $?
 
 BAK="${LL/%.ll/.bak}"
-[[ -f "$BAK" ]] && exit 2
+[[ -f "$BAK" ]] && echo "$BAK already exists" && exit 3
 mv "$LL" "$BAK" || exit $?
 "$WD/triple.py" "$BAK" > "$LL" || exit $?
 #rm "$BAK" || exit $?
@@ -83,7 +83,7 @@ mv "$LL" "$BAK" || exit $?
 EX_LLC=$?
 #rm "${LL/%.ll/.s}" || exit $?
 
-[[ -f "${BAK}1" ]] && exit 2
+[[ -f "${BAK}1" ]] && "${BAK}1 already exists" && exit 3
 mv "$LL" "${BAK}1" || exit $?
 "$WD/strip.py" "${BAK}1" > "$LL" 2> /dev/null
 EX=$?

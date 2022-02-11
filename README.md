@@ -138,8 +138,10 @@ you have to manually fix the test (e.g., by removing extra `CHECK`s that are not
 ## Error codes
 
 If any of invoked tools or scripts is failed, [`run.sh`](run.sh) returns corresponding error code.  
-In addition, it silently returns `2` if `.bak` file for given test is detected (i.e., test is already processed) with no message on stdout/stderr;  
-and `2` is also returned by [`strip.py`](strip.py) if test is unaccepted (only `CHECK`s for "SPIR-V => LLVM" direction, or some extension is used, etc) along with list of rejected `CHECK`s on stderr.
+In addition, it returns `3` if `.bak` file for given test is detected (i.e., test is already processed, so, to convert test again simply delete that `.bak`);  
+and `2` is also returned by [`strip.py`](strip.py) if test is unaccepted (only `CHECK`s for "SPIR-V => LLVM" direction, or some extension is used, etc).
+In this case displaying the list of rejected `CHECK`s on stderr is turned off (for simplifying of generating the list of accepted only tests),
+but this behavior can easily be changed by moving condition `if len(Checks_OK) ? 0:` to `sys.exit(2)` in [`strip.py`](strip.py) script.
 
 ## Extension
 
@@ -147,7 +149,7 @@ There is no single word to describe it. Some knowledge of [SPIR-V's ISA](https:/
 [SPIRV-LLVM-Translator's](https://github.com/KhronosGroup/SPIRV-LLVM-Translator/tree/master/test) internal textual format,
 how [LLVM-SPIRV-Backend's](https://github.com/KhronosGroup/LLVM-SPIRV-Backend/tree/feature/spirv-backend-llvm14/llvm/test/CodeGen/SPIRV) assembler should look like,
 syntax of [llvm-lit's](https://llvm.org/docs/CommandGuide/FileCheck.html) `CHECK` commands
-and of course understanding of implementation of [`synt.py`](synt.py) is required. So, it's better to ask author to add new instruction(s).  
+and of course understanding of implementation of [`synt.py`](synt.py) is required. So, it's better to ask the author to add new instruction(s).  
 But in general, at first find this new instruction in [SPIR-V's ISA](https://www.khronos.org/registry/SPIR-V/specs/unified1/SPIRV.html) and figure out at which position it's
 destination parameter is. There can be no destination at all (e.g., [OpBranch](https://www.khronos.org/registry/SPIR-V/specs/unified1/SPIRV.html#OpBranch)),
 or at first parameter (mostly, various types, e.g., [OpTypeBool](https://www.khronos.org/registry/SPIR-V/specs/unified1/SPIRV.html#OpTypeBool))
