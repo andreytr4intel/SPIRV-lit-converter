@@ -96,6 +96,9 @@ cd ..
 build/bin/llvm-lit llvm/test/CodeGen/SPIRV
 ```
 
+(Note. If you have no `.cl` tests, you can exclude `clang` from `-DLLVM_ENABLE_PROJECTS` and `cmake --build` and use `clang` from
+[llvm-project/SPIRV-LLVM-Translator's](https://github.com/llvm/llvm-project) repository.)
+
 ## Installing
 
 Download [`triple.py`](triple.py), [`strip.py`](strip.py), [`synt.py`](synt.py), [`run.sh`](run.sh), [`cl_par.py`](cl_par.py), [`cl2ll.py`](cl2ll.py)

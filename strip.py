@@ -15,11 +15,14 @@ if len(sys.argv) != 2:
     usage()
 
 r_run = re.compile('(\s*)(;|//)(\s*RUN\s*:)(.*)')
+r_clang = re.compile('\s*%clang_cc1\s+(.*)')
+r_triple_field = re.compile('([A-Za-z_][A-Za-z0-9_]*)-(.*)')
 r_spirv = re.compile('\s*llvm-spirv\s+(.*)')
 r_bc = re.compile('%t\S*\.bc')
 r_spv = re.compile('%t\S*\.spv\S*')
 r_filecheck = re.compile('\s*FileCheck\s+(.*)')
 
+clang_params = ''
 Spv_out = ''
 Spv_ext = ''
 Spt = ''
@@ -38,6 +41,50 @@ for line in ll:
         cmds = re.split('\|', cmd)
         for cmd in cmds:
 #            print >> sys.stderr, cmd
+            mat = r_clang.match(cmd) # %clang_cc1 *
+            if mat:
+                params = mat.group(1)
+#                print >> sys.stderr, params
+                clang_params = ' clang -cc1 -nostdsysteminc'
+                Pars = params.split()
+                tr = False
+                tr_spir = ''
+                tr_spirv = ''
+                o = False
+                for param in Pars:
+#                    print >> sys.stderr, param
+                    if tr:
+                        tr = False
+                        tr_spir = param
+                        cpu = tr_spir
+                        vendor = 'unknown'
+                        os = 'unknown'
+                        mat = r_triple_field.match(tr_spir) # spir-*
+                        if mat:
+                            cpu = mat.group(1)
+                            vendor = mat.group(2)
+#                            print cpu, vendor
+                            mat = r_triple_field.match(vendor) # unknown-*
+                            if mat:
+                                vendor = mat.group(1)
+                                os = mat.group(2)
+#                                print vendor, os
+                        if cpu == 'spir':
+                            cpu = 'spirv32'
+                        if cpu == 'spir64':
+                            cpu = 'spirv64'
+                        tr_spirv = cpu + '-' + vendor + '-' + os
+                    if param == '-triple':
+                        tr = True
+                    if o:
+                        o = False
+                        param = '-'
+                    if param == '-o':
+                        o = True
+                    if param == '-emit-llvm-bc':
+                        param = '-emit-llvm'
+                    clang_params += ' ' + param
+                clang_params += ' | sed -Ee \'s#target triple = "' + tr_spir + '"#target triple = "' + tr_spirv + '"#\' |'
             mat = r_spirv.match(cmd) # llvm-spirv *
             if mat:
                 params = mat.group(1)
@@ -265,7 +312,10 @@ for line in ll:
     if mat:
 #        print line,
         if not replaced:
-            line = mat.group(1) + mat.group(2) + mat.group(3) + ' llc -O0 %s -o - | FileCheck %s'
+            s = '%s '
+            if clang_params:
+                s = ''
+            line = mat.group(1) + mat.group(2) + mat.group(3) + clang_params + ' llc -O0 ' + s + '-o - | FileCheck %s'
             replaced = True
             if not (len(Checks_OK) == 1 and Checks_OK[0] == 'CHECK'):
                 line += ' --check-prefix'
