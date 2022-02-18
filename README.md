@@ -10,8 +10,8 @@ It's not ideal nor perfect, because some transformations cannot be converted aut
     Note: After running scripts on a test, the resulting test should be checked, reviewed and fixed manually
     (if necessary).
 
-Moreover, it's not full, i.e. do not contain every instruction from [SPIR-V's ISA](https://www.khronos.org/registry/SPIR-V/specs/unified1/SPIRV.html) nor every possible values of its parameters -
-but only that ones, that occurred in accepted lit tests (i.e. tests that present both in [SPIRV-LLVM-Translator's](https://github.com/KhronosGroup/SPIRV-LLVM-Translator/tree/master/test)
+Moreover, it's not full, i.e. does not contain every instruction from [SPIR-V's ISA](https://www.khronos.org/registry/SPIR-V/specs/unified1/SPIRV.html) nor every possible values of its parameters -
+but only that ones, that occurred in accepted lit tests (i.e. tests that are present both in [SPIRV-LLVM-Translator's](https://github.com/KhronosGroup/SPIRV-LLVM-Translator/tree/master/test)
 and [LLVM-SPIRV-Backend's](https://github.com/KhronosGroup/LLVM-SPIRV-Backend/tree/feature/spirv-backend-llvm14/llvm/test/CodeGen/SPIRV) repositories).
 
 So, if new test is to be added with "new" instruction(s)/parameter(s), `synt.py` script should be extended. (See [Extension](#extension) below.)
