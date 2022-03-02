@@ -15,5 +15,5 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 #  echo "$line"
   SLL="${STEST}${line}"
 #  echo "$SLL"
-  ./run.sh "$SLL"
+  ./run.sh "$SLL" -spt -llc -lit
 done < "$1"
