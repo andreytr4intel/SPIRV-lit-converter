@@ -31,6 +31,7 @@ complex-constexpr.ll
 empty-module.ll
 empty.ll
 entry-point-interfaces.ll
+entry_point_func.ll
 event_no_group_cap.cl
 exec_mode_float_control_khr.ll
 half_extension.ll
@@ -90,6 +91,9 @@ sitofp-with-bool.ll
 spec_const_decoration.ll
 spirv-load-store.ll
 spirv.Queue.ll
+spirv_global_variable_decoration.ll
+spirv_param_decorations.ll
+spirv_param_decorations_quals.ll
 store.ll
 transcoding/AllowIntrinsics.ll
 transcoding/AtomicCompareExchangeExplicit_cl20.cl
